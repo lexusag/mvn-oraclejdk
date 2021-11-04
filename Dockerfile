@@ -3,9 +3,10 @@ FROM buildpack-deps:buster-scm
 
 ARG MAVEN_VERSION=3.6.3
 ARG MAVEN_SHA=c35a1803a6e70a126e80b2b3ae33eed961f83ed74d18fcd16909b2d44d7dada3203f1ffe726c17ef8dcca2dcaa9fca676987befeadc9b9f759967a8cb77181c0
+ARG JAVA_VER=301
+ARG JAVA_FILENAME=jdk-8u${JAVA_VER}-linux-x64.tar.gz
 ARG MAVEN_BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
-ARG JAVA_URL=https://github.com/lexusag/mvn-oraclejdk/blob/main/jdk-8u241-linux-x64.tar.gz?raw=true
-ARG JAVA_FILENAME=jdk-8u241-linux-x64.tar.gz
+ARG JAVA_URL=https://github.com/lexusag/mvn-oraclejdk/blob/main/${JAVA_FILENAME}?raw=true
 
 # From openjdk:8-jdk-buster
 RUN set -eux; \
@@ -22,7 +23,7 @@ RUN set -eux; \
 # Oracle jdk and maven
 RUN wget --no-verbose -O /tmp/"${JAVA_FILENAME}" "${JAVA_URL}" \
     && tar xzf /tmp/"${JAVA_FILENAME}" -C /opt/ \
-    && ln -s /opt/jdk1.8.0_241 /opt/jdk \
+    && ln -s /opt/jdk1.8.0_"${JAVA_VER}" /opt/jdk \
     && ln -s /opt/maven/bin/mvn /usr/local/bin \
     && rm -f /tmp/"${JAVA_FILENAME}" \
     && mkdir -p /usr/share/maven \
